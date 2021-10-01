@@ -30,11 +30,13 @@ var currentUV = $("#current-UV");
 
 // Universal variables
 var city = "";
+var cityLat = "";
+var cityLon = "";
+var APIKey = "06875dc6f6410e88cef926ae5d7a97b9";
 
 
-// Fetches data from the API to populate the page
+// Fetches the latitude and logiture from the API to call the second API
 function getAPI(city) {
-    var APIKey = "06875dc6f6410e88cef926ae5d7a97b9";
     var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=06875dc6f6410e88cef926ae5d7a97b9";
 
     fetch(requestURL)
@@ -42,19 +44,43 @@ function getAPI(city) {
             return response.json();
         })
         .then(function(data) {
-            console.log(data);
-            displayCurrentWeather(data);
-
+            cityLon = (data.coord.lon);
+            cityLat = (data.coord.lat);
+            getOneCall(cityLon, cityLat); 
+            currentCityNow.text(data.name);
         })
 }
 
-function displayCurrentWeather(data){
-    currentCityNow.text(data.name);
-    currentTemp.text("Temperature: " + data.main.temp + "° F");
-    currentWind.text("Wind Speed: " + data.wind.speed + " MPH");
-    currentHumid.text("Humidity: " + data.main.humidity + "%");
-    
+
+// Fetches current and future weather from second API
+function getOneCall(cityLon, cityLat){
+    var requestURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon="+ cityLon + "&appid=" + APIKey;
+
+    fetch(requestURL)
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data);
+        
+        // displayCurrentWeather(data);
+
+    })
+
 }
+
+// Published the current city and current weather data to page
+// function displayCurrentWeather(data){
+//     currentTemp.text("Temperature: " + data.main.temp + "°F");
+//     currentWind.text("Wind Speed: " + data.wind.speed + " MPH");
+//     currentHumid.text("Humidity: " + data.main.humidity + "%");
+    
+// }
+
+
+
+
+
 
 // Event listener that listens for a button click, calls the function to get API, and displays main page section
 searchBtn.click(function(event) {
