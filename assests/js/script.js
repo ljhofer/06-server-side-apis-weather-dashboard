@@ -1,7 +1,7 @@
 
 
 
-      
+ //Get dates in current and future displays    
     //event listener
         //Save searched citites to local storage
         //Create button named that city 
@@ -22,11 +22,14 @@ var cityInputField = $("#cityInput")[0];
 
 // Variables for current weather section
 var mainSection = $("#main-section");
-var currentCityNow = $("current-city-now");
-var currentTemp = $("current-temp");
-var currentWind = $("current-wind");
-var currentHumid = $("current-humid");
-var currentUV = $("current-UV");
+var currentCityNow = $("#current-city-now");
+var currentTemp = $("#current-temp");
+var currentWind = $("#current-wind");
+var currentHumid = $("#current-humid");
+var currentUV = $("#current-UV");
+
+// Universal variables
+var city = "";
 
 
 // Fetches data from the API to populate the page
@@ -40,21 +43,23 @@ function getAPI(city) {
         })
         .then(function(data) {
             console.log(data);
-            displayCurrentAPI();
+            displayCurrentWeather(data);
 
         })
 }
 
-// function displayCurrentWeather(){
-//     currentCityNow.text()
-
-
-// }
+function displayCurrentWeather(data){
+    currentCityNow.text(data.name);
+    currentTemp.text("Temperature: " + data.main.temp + "° F");
+    currentWind.text("Wind Speed: " + data.wind.speed + " MPH");
+    currentHumid.text("Humidity: " + data.main.humidity + "%");
+    
+}
 
 // Event listener that listens for a button click, calls the function to get API, and displays main page section
 searchBtn.click(function(event) {
     event.preventDefault();
-    var city = cityInputField.value;
+    city = cityInputField.value;
     mainSection.show();
     getAPI(city);
 
