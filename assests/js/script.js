@@ -1,12 +1,4 @@
 
-
-
-//Get dates in current and future displays    
-//Add classes based on current UV index 
-//Add images
-//auto capitalize first letter
-
-
 // Variables for aside
 var searchBtn = $("#city-search-button");
 var cityInputField = $("#cityInput")[0];
@@ -33,17 +25,21 @@ var previousCities = [];
 
 
 // Sets local storage elements on page load and poluates if necessary
-// function start() {
-//     if (localStorage.getItem("previousCities" !== null)) {
-//         previousCities = JSON.parse(localStorage.getItem("previousCities"));
-//         previousCities.each(function() {
-//             $("<button/>")
-//                 .text($(this))
-//                 .class("previousCityButton")
-//                 .click(getAPI($(this)));
-//         })
-// }
-// }
+function start() {
+    
+    if (localStorage.getItem("previousCities") !== null) {
+        previousCities = JSON.parse(localStorage.getItem("previousCities"));
+        
+        for (i = 0; i < previousCities.length; i++) {
+            var newButton = $("<button>");
+            newButton.text(previousCities[i]);
+            newButton.addClass("previousCityButton")
+            newButton.click(function(event) {
+                getAPI(previousCities[i])});
+            newButton.appendTo(previousSearches);
+        }
+}
+}
 
 
 // Checks to see if current city is in already in local and creates a button if not
@@ -105,7 +101,7 @@ function displayCurrentWeather(data){
     currentTemp.text("Temperature: " + data.current.temp + "°F");
     currentWind.text("Wind Speed: " + data.current.wind_speed + " MPH");
     currentHumid.text("Humidity: " + data.current.humidity + "%");
-    currentUV.text("UV Index: " + data.current.uvi);
+    currentUV.text(data.current.uvi);
     displayFiveDayWeather(data)
 }
 
@@ -121,10 +117,8 @@ function displayFiveDayWeather (data) {
 }
 
 
-
-
 // Calls start function
-// start();
+start();
 
 // Event listener that listens for a button click, calls the function to get API, and displays main page section
 searchBtn.click(function(event) {
