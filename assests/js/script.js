@@ -21,6 +21,7 @@ var cityLat = "";
 var cityLon = "";
 var APIKey = "06875dc6f6410e88cef926ae5d7a97b9";
 var previousCities = [];
+var currentUVIndex = "";
 
 
 
@@ -32,10 +33,12 @@ function start() {
         
         for (i = 0; i < previousCities.length; i++) {
             var newButton = $("<button>");
+            
             newButton.text(previousCities[i]);
             newButton.addClass("previousCityButton")
             newButton.click(function(event) {
                 getAPI(previousCities[i])});
+            
             newButton.appendTo(previousSearches);
         }
 }
@@ -74,6 +77,7 @@ function getAPI(city) {
             return response.json();
         })
         .then(function(data) {
+            console.log(data);
             cityLon = (data.coord.lon);
             cityLat = (data.coord.lat);
             getOneCall(cityLon, cityLat); 
@@ -81,30 +85,49 @@ function getAPI(city) {
         })
 }
 
-
 // Fetches current and future weather from second API
-function getOneCall(cityLon, cityLat){
+function getOneCall(cityLon, cityLat) {
     var requestURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon="+ cityLon + "&units=imperial&appid=" + APIKey;
 
     fetch(requestURL)
-    .then(function(response){
-        return response.json();
-    })
-    .then(function(data) {
-        console.log(data);
-        displayCurrentWeather(data);
-    })
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(data) {
+            displayCurrentWeather(data);
+        })
 }
 
-// Published the current weather data to page
-function displayCurrentWeather(data){
+// Publishes the current weather data to page
+function displayCurrentWeather(data) {
+    // Chaanges text content in current weather area
     currentTemp.text("Temperature: " + data.current.temp + "°F");
     currentWind.text("Wind Speed: " + data.current.wind_speed + " MPH");
     currentHumid.text("Humidity: " + data.current.humidity + "%");
     currentUV.text(data.current.uvi);
-    displayFiveDayWeather(data)
+    
+    displayFiveDayWeather(data);
+
+    currentUVIndex = (data.current.uvi);
+    displayUVConditions(currentUVIndex);
 }
 
+// Checks value of UV index and changes its color appropriate
+function displayUVConditions(currentUVIndex) {
+    currentUV.removeClass("severe");
+    currentUV.removeClass("moderate");
+    currentUV.removeClass("favorable");
+    if (currentUVIndex >= 6) {
+        currentUV.addClass("severe");
+    } else if(currentUVIndex >= 3 && currentUVIndex < 6) {
+        currentUV.addClass("moderate");
+    } else {
+        currentUV.addClass("favorable");
+    }
+
+}
+
+// Publises the five day weather data to page
 function displayFiveDayWeather (data) {
     var dayCounter = 1;
     

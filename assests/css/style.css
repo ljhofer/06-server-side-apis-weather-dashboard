@@ -16,6 +16,23 @@
     outline: 1px solid black; 
 }
 
+#current-UV {
+    outline: 1px solid black; 
+}
+
+.favorable {
+    background-color: green;
+}
+
+.moderate {
+    background-color: yellow;
+}
+
+
+.severe { 
+    background-color: red;
+}
+
 .five-day-section {
     outline: 1px solid black;
 }
