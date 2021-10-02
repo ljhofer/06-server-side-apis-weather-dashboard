@@ -33,12 +33,10 @@ function start() {
         
         for (i = 0; i < previousCities.length; i++) {
             var newButton = $("<button>");
+            var previousCityName = previousCities[i];
             
-            newButton.text(previousCities[i]);
+            newButton.text(previousCityName);
             newButton.addClass("previousCityButton")
-            newButton.click(function(event) {
-                getAPI(previousCities[i])});
-            
             newButton.appendTo(previousSearches);
         }
 }
@@ -58,8 +56,6 @@ function checkLocalStorage(city) {
         var newButton = $("<button>");
         newButton.text(city);
         newButton.addClass("previousCityButton")
-        newButton.click(function(event) {
-            getAPI(city)});
         newButton.appendTo(previousSearches);
 
         // Calls getAPI fucntion on searched city
@@ -70,6 +66,7 @@ function checkLocalStorage(city) {
 
 // Fetches the latitude and logiture from the API to call the second API
 function getAPI(city) {
+    mainSection.show();
     var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=06875dc6f6410e88cef926ae5d7a97b9";
 
     fetch(requestURL)
@@ -147,8 +144,11 @@ start();
 searchBtn.click(function(event) {
     event.preventDefault();
     city = cityInputField.value;
-    mainSection.show();
     checkLocalStorage(city);
 
 })
 
+// Event listener for clicks on buttons for previously searched cities
+previousSearches.click(function(event){
+    getAPI(event.target.textContent);  
+})
