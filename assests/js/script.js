@@ -1,24 +1,16 @@
 
 
 
- //Get dates in current and future displays    
-    //event listener
-        //Save searched citites to local storage
-        //Create button named that city 
-            //Event listener that will send us back to Query while passing in the city name
-
-// Query the API for the city -- check if it is one request or two
-    //Look inside each one to see what we need to pull out
-    //populate div for current wieather
-        //Add classes based on current UV index 
-        //Add images
-    //Populate div of divs for for the five-day forecast
-        //Add images
+//Get dates in current and future displays    
+//Add classes based on current UV index 
+//Add images
+//auto capitalize first letter
 
 
 // Variables for aside
 var searchBtn = $("#city-search-button");
 var cityInputField = $("#cityInput")[0];
+var previousSearches = $("#previous-searches");
 
 // Variables for current weather section
 var mainSection = $("#main-section");
@@ -36,6 +28,45 @@ var city = "";
 var cityLat = "";
 var cityLon = "";
 var APIKey = "06875dc6f6410e88cef926ae5d7a97b9";
+var previousCities = [];
+
+
+
+// Sets local storage elements on page load and poluates if necessary
+// function start() {
+//     if (localStorage.getItem("previousCities" !== null)) {
+//         previousCities = JSON.parse(localStorage.getItem("previousCities"));
+//         previousCities.each(function() {
+//             $("<button/>")
+//                 .text($(this))
+//                 .class("previousCityButton")
+//                 .click(getAPI($(this)));
+//         })
+// }
+// }
+
+
+// Checks to see if current city is in already in local and creates a button if not
+function checkLocalStorage(city) {
+   if (previousCities.includes(city)) {
+        getAPI(city);
+   } else {
+        // Adds city to local storage array
+        previousCities.push(city);
+        localStorage.setItem("previousCities", JSON.stringify(previousCities));
+
+        // Creates a button in previously searched cities area
+        var newButton = $("<button>");
+        newButton.text(city);
+        newButton.addClass("previousCityButton")
+        newButton.click(function(event) {
+            getAPI(city)});
+        newButton.appendTo(previousSearches);
+
+        // Calls getAPI fucntion on searched city
+        getAPI(city);
+   }
+}
 
 
 // Fetches the latitude and logiture from the API to call the second API
@@ -67,7 +98,6 @@ function getOneCall(cityLon, cityLat){
         console.log(data);
         displayCurrentWeather(data);
     })
-
 }
 
 // Published the current weather data to page
@@ -87,24 +117,21 @@ function displayFiveDayWeather (data) {
         $(this).children(".five-day-wind").text("Wind: " + data.daily[dayCounter].wind_speed + " MPH");
         $(this).children(".five-day-humid").text("Humidity: " + data.daily[dayCounter].humidity + "%");
         dayCounter++;
-        // console.log("hello");
-
-
     })
-
 }
 
 
 
 
-
+// Calls start function
+// start();
 
 // Event listener that listens for a button click, calls the function to get API, and displays main page section
 searchBtn.click(function(event) {
     event.preventDefault();
     city = cityInputField.value;
     mainSection.show();
-    getAPI(city);
+    checkLocalStorage(city);
 
 })
 
