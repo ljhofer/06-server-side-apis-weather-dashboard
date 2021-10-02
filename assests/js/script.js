@@ -28,6 +28,9 @@ var currentWind = $("#current-wind");
 var currentHumid = $("#current-humid");
 var currentUV = $("#current-UV");
 
+// Variable for five day forecast area
+var fiveDaySection = $(".five-day-section");
+
 // Universal variables
 var city = "";
 var cityLat = "";
@@ -54,7 +57,7 @@ function getAPI(city) {
 
 // Fetches current and future weather from second API
 function getOneCall(cityLon, cityLat){
-    var requestURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon="+ cityLon + "&appid=" + APIKey;
+    var requestURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon="+ cityLon + "&units=imperial&appid=" + APIKey;
 
     fetch(requestURL)
     .then(function(response){
@@ -62,20 +65,34 @@ function getOneCall(cityLon, cityLat){
     })
     .then(function(data) {
         console.log(data);
-        
-        // displayCurrentWeather(data);
-
+        displayCurrentWeather(data);
     })
 
 }
 
-// Published the current city and current weather data to page
-// function displayCurrentWeather(data){
-//     currentTemp.text("Temperature: " + data.main.temp + "°F");
-//     currentWind.text("Wind Speed: " + data.wind.speed + " MPH");
-//     currentHumid.text("Humidity: " + data.main.humidity + "%");
+// Published the current weather data to page
+function displayCurrentWeather(data){
+    currentTemp.text("Temperature: " + data.current.temp + "°F");
+    currentWind.text("Wind Speed: " + data.current.wind_speed + " MPH");
+    currentHumid.text("Humidity: " + data.current.humidity + "%");
+    currentUV.text("UV Index: " + data.current.uvi);
+    displayFiveDayWeather(data)
+}
+
+function displayFiveDayWeather (data) {
+    var dayCounter = 1;
     
-// }
+    fiveDaySection.each(function() {
+        $(this).children(".five-day-temp").text("Temp: " + data.daily[dayCounter].temp.max + "°F");
+        $(this).children(".five-day-wind").text("Wind: " + data.daily[dayCounter].wind_speed + " MPH");
+        $(this).children(".five-day-humid").text("Humidity: " + data.daily[dayCounter].humidity + "%");
+        dayCounter++;
+        // console.log("hello");
+
+
+    })
+
+}
 
 
 
