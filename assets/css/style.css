@@ -61,21 +61,14 @@ aside {
 
 #five-day-header {
     margin-top: 15px;
-
 }
 
-
-/* #five-boxes {
-    margin: 15px;
-    
-} */
 
 .five-day-section {
     outline: 1px solid black;
     display: inline;
-    margin-left: 25px;
-
-        
+    margin-left: 5px;
+    padding: 2px;
 }
 
 
