@@ -7,6 +7,7 @@ var previousSearches = $("#previous-searches");
 // Variables for current weather section
 var mainSection = $("#main-section");
 var currentCityNow = $("#current-city-now");
+var currentWeatherIcon = $("#current-weather-icon");
 var currentTemp = $("#current-temp");
 var currentWind = $("#current-wind");
 var currentHumid = $("#current-humid");
@@ -22,6 +23,7 @@ var cityLon = "";
 var APIKey = "06875dc6f6410e88cef926ae5d7a97b9";
 var previousCities = [];
 var currentUVIndex = "";
+
 
 
 
@@ -74,11 +76,15 @@ function getAPI(city) {
             return response.json();
         })
         .then(function(data) {
-            console.log(data);
             cityLon = (data.coord.lon);
             cityLat = (data.coord.lat);
             getOneCall(cityLon, cityLat); 
             currentCityNow.text(data.name);
+
+            var iconCode = data.weather[0].icon;
+            var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+            currentWeatherIcon.attr("src", iconURL);
+    
         })
 }
 
@@ -102,6 +108,7 @@ function displayCurrentWeather(data) {
     currentWind.text("Wind Speed: " + data.current.wind_speed + " MPH");
     currentHumid.text("Humidity: " + data.current.humidity + "%");
     currentUV.text(data.current.uvi);
+
     
     displayFiveDayWeather(data);
 
@@ -127,11 +134,22 @@ function displayUVConditions(currentUVIndex) {
 // Publises the five day weather data to page
 function displayFiveDayWeather (data) {
     var dayCounter = 1;
+
+    console.log(data);
     
+   // TODO comment
     fiveDaySection.each(function() {
+        var iconCode = data.daily[dayCounter].weather[0].icon;
+        var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+
+        console.log(iconCode);
+        
+        //TODO comment
+        $(this).children(".five-day-icons").attr("src", iconURL);
         $(this).children(".five-day-temp").text("Temp: " + data.daily[dayCounter].temp.max + "°F");
         $(this).children(".five-day-wind").text("Wind: " + data.daily[dayCounter].wind_speed + " MPH");
         $(this).children(".five-day-humid").text("Humidity: " + data.daily[dayCounter].humidity + "%");
+        
         dayCounter++;
     })
 }
