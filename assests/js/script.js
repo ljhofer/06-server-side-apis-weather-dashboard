@@ -4,9 +4,11 @@ var searchBtn = $("#city-search-button");
 var cityInputField = $("#cityInput")[0];
 var previousSearches = $("#previous-searches");
 
-// Variables for current weather section
+// Variables for current weather section and Moment JS functionality
+var now = moment();
 var mainSection = $("#main-section");
 var currentCityNow = $("#current-city-now");
+var currentDate = $("#current-date");
 var currentWeatherIcon = $("#current-weather-icon");
 var currentTemp = $("#current-temp");
 var currentWind = $("#current-wind");
@@ -27,9 +29,10 @@ var currentUVIndex = "";
 
 
 
-// Sets local storage elements on page load and poluates if necessary
+// Sets the current date and displays local storage elements on page load and poluates if necessary
 function start() {
-    
+    currentDate.text(now.format("dddd, MMMM Do"));
+
     if (localStorage.getItem("previousCities") !== null) {
         previousCities = JSON.parse(localStorage.getItem("previousCities"));
         
@@ -40,7 +43,7 @@ function start() {
             newButton.text(previousCityName);
             newButton.addClass("previousCityButton")
             newButton.appendTo(previousSearches);
-        }
+        }   
 }
 }
 
@@ -142,8 +145,10 @@ function displayFiveDayWeather (data) {
     fiveDaySection.each(function() {
         var iconCode = data.daily[dayCounter].weather[0].icon;
         var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
+        var nowI = now.add(1, "day");
         
-        //TODO comment
+        // TODO
+        $(this).children(".five-day-heading").text(nowI.format("ddd MM/DD"));
         $(this).children(".five-day-icons").attr("src", iconURL);
         $(this).children(".five-day-temp").text("Temp: " + data.daily[dayCounter].temp.max + "°F");
         $(this).children(".five-day-wind").text("Wind: " + data.daily[dayCounter].wind_speed + " MPH");
