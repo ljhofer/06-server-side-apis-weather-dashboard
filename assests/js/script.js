@@ -27,8 +27,6 @@ var previousCities = [];
 var currentUVIndex = "";
 
 
-
-
 // Sets the current date and displays local storage elements on page load and poluates if necessary
 function start() {
     currentDate.text(now.format("dddd, MMMM Do"));
@@ -47,8 +45,7 @@ function start() {
 }
 }
 
-
-// Checks to see if current city is in already in local and creates a button if not
+// Checks to see if current city is already in local storage and creates a button if not
 function checkLocalStorage(city) {
    if (!previousCities.includes(city)) {
         // Adds city to local storage array
@@ -63,14 +60,14 @@ function checkLocalStorage(city) {
    }
 }
 
-
-// Fetches the latitude and logiture from the API to call the second API
+// Fetches the latitude and logitude from the API to use in call the second API
 //TODO comment some more inside here
 function getAPI(city) {
     mainSection.show();
     city = city.toUpperCase();
     var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=06875dc6f6410e88cef926ae5d7a97b9";
 
+    // Request for data from API
     fetch(requestURL)
         .then(function(response){
             if (response.ok) {
@@ -78,6 +75,7 @@ function getAPI(city) {
                     cityLon = (data.coord.lon);
                     cityLat = (data.coord.lat);
                     
+                    // Calls functions for checking local storage and the next API call for weather data
                     checkLocalStorage(city);
                     getOneCall(cityLon, cityLat); 
                     currentCityNow.text(city);
@@ -86,6 +84,7 @@ function getAPI(city) {
                     var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
                     currentWeatherIcon.attr("src", iconURL);
                 })
+             // Alerts user if there is an error or if their input is invalid    
             } else {
                 alert('Error: ' + response.statusText);
             }
@@ -110,20 +109,19 @@ function getOneCall(cityLon, cityLat) {
 
 // Publishes the current weather data to page
 function displayCurrentWeather(data) {
-    // Chaanges text content in current weather area
+    // Changes text content in current weather area
     currentTemp.text("Temperature: " + data.current.temp + "°F");
     currentWind.text("Wind Speed: " + data.current.wind_speed + " MPH");
     currentHumid.text("Humidity: " + data.current.humidity + "%");
-    currentUV.text(data.current.uvi);
-
-    //TODO comment
-    displayFiveDayWeather(data);
-
+    currentUV.text("UV Index " + data.current.uvi);
     currentUVIndex = (data.current.uvi);
+    
+    // Calls the functions to set five day forecast and display UV index condtitions
+    displayFiveDayWeather(data);
     displayUVConditions(currentUVIndex);
 }
 
-// Checks value of UV index and changes its color appropriate
+// Checks value of UV index and changes its color appropriately
 function displayUVConditions(currentUVIndex) {
     currentUV.removeClass("severe");
     currentUV.removeClass("moderate");
@@ -141,19 +139,19 @@ function displayUVConditions(currentUVIndex) {
 function displayFiveDayWeather (data) {
     var dayCounter = 1;
     
-   // TODO comment
     fiveDaySection.each(function() {
         var iconCode = data.daily[dayCounter].weather[0].icon;
         var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
         var nowI = now.add(1, "day");
         
-        // TODO
+        // Iterates over the HTML elements to set the to reflect the API data
         $(this).children(".five-day-heading").text(nowI.format("ddd MM/DD"));
         $(this).children(".five-day-icons").attr("src", iconURL);
         $(this).children(".five-day-temp").text("Temp: " + data.daily[dayCounter].temp.max + "°F");
         $(this).children(".five-day-wind").text("Wind: " + data.daily[dayCounter].wind_speed + " MPH");
         $(this).children(".five-day-humid").text("Humidity: " + data.daily[dayCounter].humidity + "%");
         
+        //Increased day counter by one
         dayCounter++;
     })
 }
@@ -162,13 +160,12 @@ function displayFiveDayWeather (data) {
 // Calls start function
 start();
 
-// Event listener that listens for a button click, calls the function to get API, and displays main page section
+// Event listener that listens for a button click, calls the function to get API, and clears input field 
 searchBtn.click(function(event) {
     event.preventDefault();
     city = cityInputField.value;
-    getAPI(city);
-    
-    //Todo - return to default text in input box
+    cityInputField.value = "";
+    getAPI(city);  
 })
 
 // Event listener for clicks on buttons for previously searched cities

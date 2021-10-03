@@ -1,15 +1,37 @@
 
+.container {
+    display: flex;
+
+}
+
 /* Styling for search input field area */
+
+aside {
+    width: 20%;
+
+
+}
+
 #city-search-button {
     margin-left: 15px;
     margin-right: 15px;
 }
 
 
-/* Styling for main section */
+
+.previousCityButton{
+    margin-top: 25px;
+    background-color: rgb(192, 225, 226);
+    display: block;
+
+}
+
+/* Styling for current weather section */
 
 #main-section {
     display:none;
+    width: 70%;
+
 }
 
 #current-weather-area {
@@ -21,19 +43,33 @@
 }
 
 .favorable {
-    background-color: green;
+    background-color: rgb(129, 197, 129);
 }
 
 .moderate {
-    background-color: yellow;
+    background-color: rgb(245, 245, 106);
 }
 
 .severe { 
-    background-color: red;
+    background-color: rgb(204, 123, 123);
+}
+
+
+/* Styling for five day forecast area */
+
+/* #five-day-forecast-area {
+    display: inline;
+
+} */
+
+#five-boxes {
+    display: inline;
+
 }
 
 .five-day-section {
     outline: 1px solid black;
+    
 }
 
 
