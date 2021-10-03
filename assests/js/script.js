@@ -65,6 +65,7 @@ function checkLocalStorage(city) {
 //TODO comment some more inside here
 function getAPI(city) {
     mainSection.show();
+    city = city.toUpperCase();
     var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=06875dc6f6410e88cef926ae5d7a97b9";
 
     fetch(requestURL)
@@ -76,7 +77,7 @@ function getAPI(city) {
                     
                     checkLocalStorage(city);
                     getOneCall(cityLon, cityLat); 
-                    currentCityNow.text(data.name);
+                    currentCityNow.text(city);
         
                     var iconCode = data.weather[0].icon;
                     var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
@@ -159,7 +160,6 @@ start();
 // Event listener that listens for a button click, calls the function to get API, and displays main page section
 searchBtn.click(function(event) {
     event.preventDefault();
-    cityInputField.val($)
     city = cityInputField.value;
     getAPI(city);
     //Todo - return to default text in input box
