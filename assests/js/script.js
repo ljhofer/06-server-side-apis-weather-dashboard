@@ -162,6 +162,7 @@ searchBtn.click(function(event) {
     event.preventDefault();
     city = cityInputField.value;
     getAPI(city);
+    
     //Todo - return to default text in input box
 })
 
