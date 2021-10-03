@@ -8,20 +8,21 @@
 
 aside {
     width: 20%;
-
-
+    margin-right: 20px;
 }
 
+
 #city-search-button {
-    margin-left: 15px;
-    margin-right: 15px;
+    background-color: rgb(140, 172, 233);
+    width: 50 px;
 }
 
 
 
 .previousCityButton{
     margin-top: 25px;
-    background-color: rgb(192, 225, 226);
+    margin-right: 15px;
+    background-color: rgb(209, 214, 210);
     display: block;
 
 }
@@ -31,15 +32,16 @@ aside {
 #main-section {
     display:none;
     width: 70%;
-
+    justify-content: center;
 }
 
 #current-weather-area {
-    outline: 1px solid black; 
+    outline: 1px solid rgb(87, 83, 83); 
+    padding: 50px;
 }
 
 #current-UV {
-    outline: 1px solid black; 
+    width: 200px;
 }
 
 .favorable {
@@ -57,19 +59,23 @@ aside {
 
 /* Styling for five day forecast area */
 
-/* #five-day-forecast-area {
-    display: inline;
-
-} */
-
-#five-boxes {
-    display: inline;
+#five-day-header {
+    margin-top: 15px;
 
 }
 
+
+/* #five-boxes {
+    margin: 15px;
+    
+} */
+
 .five-day-section {
     outline: 1px solid black;
-    
+    display: inline;
+    margin-left: 25px;
+
+        
 }
 
 

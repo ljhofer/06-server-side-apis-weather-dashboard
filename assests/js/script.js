@@ -61,7 +61,6 @@ function checkLocalStorage(city) {
 }
 
 // Fetches the latitude and logitude from the API to use in call the second API
-//TODO comment some more inside here
 function getAPI(city) {
     mainSection.show();
     city = city.toUpperCase();
