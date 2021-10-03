@@ -79,7 +79,7 @@ function getAPI(city) {
                     currentCityNow.text(data.name);
         
                     var iconCode = data.weather[0].icon;
-                    var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+                    var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
                     currentWeatherIcon.attr("src", iconURL);
                 })
             } else {
@@ -140,7 +140,7 @@ function displayFiveDayWeather (data) {
    // TODO comment
     fiveDaySection.each(function() {
         var iconCode = data.daily[dayCounter].weather[0].icon;
-        var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+        var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
         
         //TODO comment
         $(this).children(".five-day-icons").attr("src", iconURL);
@@ -159,6 +159,7 @@ start();
 // Event listener that listens for a button click, calls the function to get API, and displays main page section
 searchBtn.click(function(event) {
     event.preventDefault();
+    cityInputField.val($)
     city = cityInputField.value;
     getAPI(city);
     //Todo - return to default text in input box
