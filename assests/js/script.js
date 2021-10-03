@@ -47,9 +47,7 @@ function start() {
 
 // Checks to see if current city is in already in local and creates a button if not
 function checkLocalStorage(city) {
-   if (previousCities.includes(city)) {
-        getAPI(city);
-   } else {
+   if (!previousCities.includes(city)) {
         // Adds city to local storage array
         previousCities.push(city);
         localStorage.setItem("previousCities", JSON.stringify(previousCities));
@@ -59,32 +57,37 @@ function checkLocalStorage(city) {
         newButton.text(city);
         newButton.addClass("previousCityButton")
         newButton.appendTo(previousSearches);
-
-        // Calls getAPI fucntion on searched city
-        getAPI(city);
    }
 }
 
 
 // Fetches the latitude and logiture from the API to call the second API
+//TODO comment some more inside here
 function getAPI(city) {
     mainSection.show();
     var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=06875dc6f6410e88cef926ae5d7a97b9";
 
     fetch(requestURL)
         .then(function(response){
-            return response.json();
+            if (response.ok) {
+                response.json().then(function(data) {
+                    cityLon = (data.coord.lon);
+                    cityLat = (data.coord.lat);
+                    
+                    checkLocalStorage(city);
+                    getOneCall(cityLon, cityLat); 
+                    currentCityNow.text(data.name);
+        
+                    var iconCode = data.weather[0].icon;
+                    var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+                    currentWeatherIcon.attr("src", iconURL);
+                })
+            } else {
+                alert('Error: ' + response.statusText);
+            }
         })
-        .then(function(data) {
-            cityLon = (data.coord.lon);
-            cityLat = (data.coord.lat);
-            getOneCall(cityLon, cityLat); 
-            currentCityNow.text(data.name);
-
-            var iconCode = data.weather[0].icon;
-            var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
-            currentWeatherIcon.attr("src", iconURL);
-    
+        .catch(function(error){
+            alert("Unable to connect to Weather Dashboard");
         })
 }
 
@@ -109,7 +112,7 @@ function displayCurrentWeather(data) {
     currentHumid.text("Humidity: " + data.current.humidity + "%");
     currentUV.text(data.current.uvi);
 
-    
+    //TODO comment
     displayFiveDayWeather(data);
 
     currentUVIndex = (data.current.uvi);
@@ -128,21 +131,16 @@ function displayUVConditions(currentUVIndex) {
     } else {
         currentUV.addClass("favorable");
     }
-
 }
 
 // Publises the five day weather data to page
 function displayFiveDayWeather (data) {
     var dayCounter = 1;
-
-    console.log(data);
     
    // TODO comment
     fiveDaySection.each(function() {
         var iconCode = data.daily[dayCounter].weather[0].icon;
         var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
-
-        console.log(iconCode);
         
         //TODO comment
         $(this).children(".five-day-icons").attr("src", iconURL);
@@ -162,8 +160,8 @@ start();
 searchBtn.click(function(event) {
     event.preventDefault();
     city = cityInputField.value;
-    checkLocalStorage(city);
-
+    getAPI(city);
+    //Todo - return to default text in input box
 })
 
 // Event listener for clicks on buttons for previously searched cities
